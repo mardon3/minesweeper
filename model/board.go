@@ -52,14 +52,14 @@ func NewBoard(width, height, mines int) *Board {
 func (board *Board) countAdjacentMines(row, col int) int {
 	adjacentMines := 0
 
-	directions := []struct{ drow, dcol int }{
+	directions := []struct{ dirRow, dirCol int }{
 		{-1, -1}, {-1, 0}, {-1, 1},
 		{0, -1},           {0, 1},
 		{1, -1},  {1, 0},  {1, 1},
 	}
 
-	for _, dir := range directions {
-		r, c := row+dir.drow, col+dir.dcol
+	for _, direction := range directions {
+		r, c := row + direction.dirRow, col + direction.dirCol
 
 		// Check if the adjacent cell is within the board boundaries
 		if r >= 0 && r < board.height && c >= 0 && c < board.width {
