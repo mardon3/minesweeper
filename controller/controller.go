@@ -1,15 +1,15 @@
 package controller
 
 // Reveal a cell
-func leftClickCell() {
+func LeftClickCell() {
 }
 
 // Flags a cell
-func rightClickCell() {
+func RightClickCell() {
 }
 
-func selectDifficulty() {
+func SelectDifficulty() {
 }
 
-func resetGame() {
+func ClickResetGame() {
 }
