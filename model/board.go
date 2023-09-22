@@ -1,4 +1,4 @@
-package main
+package model
 
 import "math/rand"
 
@@ -32,7 +32,7 @@ func NewBoard(width, height, mines int) *Board {
 		row := rand.Intn(height)
 		col := rand.Intn(width)
 
-		if board.cells[row][col].value != -1 {
+		if !board.isMine(row, col) {
 			board.cells[row][col].value = -1
 			placedMines++
 		}
@@ -40,7 +40,7 @@ func NewBoard(width, height, mines int) *Board {
 
 	for row := range board.cells {
 		for col := range board.cells[row] {
-			if board.cells[row][col].value != -1 {
+			if !board.isMine(row, col) {
 				board.cells[row][col].value = board.countAdjacentMines(row, col)
 			}
 		}
@@ -50,7 +50,30 @@ func NewBoard(width, height, mines int) *Board {
 }
 
 func (board *Board) countAdjacentMines(row, col int) int {
-	count := 0
+	adjacentMines := 0
 
-	// TODO
+	directions := []struct{ drow, dcol int }{
+		{-1, -1}, {-1, 0}, {-1, 1},
+		{0, -1},           {0, 1},
+		{1, -1},  {1, 0},  {1, 1},
+	}
+
+	for _, dir := range directions {
+		r, c := row+dir.drow, col+dir.dcol
+
+		// Check if the adjacent cell is within the board boundaries
+		if r >= 0 && r < board.height && c >= 0 && c < board.width {
+			if board.isMine(r, c) {
+				adjacentMines++
+			}
+		}
+	}
+
+	return adjacentMines
 }
+
+func (board *Board) isMine(row, col int) bool {
+	return board.cells[row][col].value == -1
+}
+
+// TODO: Reavel or GetCell function
