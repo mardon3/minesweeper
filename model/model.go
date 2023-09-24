@@ -10,25 +10,28 @@ type Cell struct {
 	isFlagged bool
 }
 
-type Board struct {
-	cells [][]Cell
-	height int
-	width int
-	mines int
-	flags int
-	hasStarted bool // Not sure if this needed
-}
+var board [][]Cell
+var flagsLeft int
+var minesCount int
+var unRevealedCells int
 
-func NewBoard(width, height, mines int) *Board {
-	board := &Board{
-		cells: make([][]Cell, height),
-		height: height,
-		width: width,
-		mines: mines,
-	}
+// Enum type for cell types
+type CellType int
 
-	for i := range board.cells {
-		board.cells[i] = make([]Cell, width)
+// Enums for cell types
+const (
+	MineCell CellType = iota
+	EmptyCell 
+	ValueCell 
+)
+
+func NewBoard(height, width, mines int) {
+	flagsLeft, minesCount = mines, mines
+	unRevealedCells = height * width
+	board = make([][]Cell, height)
+
+	for i := range board {
+		board[i] = make([]Cell, width)
 	}
 
 	placedMines := 0
@@ -36,27 +39,25 @@ func NewBoard(width, height, mines int) *Board {
 		row := rand.Intn(height)
 		col := rand.Intn(width)
 
-		if !IsMine(board.cells, row, col) {
-			board.cells[row][col].value = -1
+		if GetCellType(row, col) != MineCell {
+			board[row][col].value = -1
 			placedMines++
 		}
 	}
 
-	for row := range board.cells {
-		for col := range board.cells[row] {
-			if !IsMine(board.cells, row, col) {
-				board.cells[row][col].value = countAdjacentMines(board, row, col)
+	for row := range board {
+		for col := range board[row] {
+			if GetCellType(row, col) != MineCell {
+				board[row][col].value = countAdjacentMines(row, col)
 			}
 		}
 	}
-
-	return board
 }
 
-func countAdjacentMines(board *Board, row, col int) int {
+func countAdjacentMines(row, col int) int {
 	adjacentMines := 0
 
-	directions := []struct{ dirRow, dirCol int }{
+	directions := []struct{dirRow, dirCol int}{
 		{-1, -1}, {-1, 0}, {-1, 1},
 		{0, -1},           {0, 1},
 		{1, -1},  {1, 0},  {1, 1},
@@ -66,8 +67,8 @@ func countAdjacentMines(board *Board, row, col int) int {
 		r, c := row + direction.dirRow, col + direction.dirCol
 
 		// Check if the adjacent cell is within the board boundaries
-		if r >= 0 && r < board.height && c >= 0 && c < board.width {
-			if IsMine(board.cells, r, c) {
+		if r >= 0 && r < getBoardHeight() && c >= 0 && c < getBoardWidth() {
+			if GetCellType(r, c) == MineCell {
 				adjacentMines++
 			}
 		}
@@ -76,24 +77,61 @@ func countAdjacentMines(board *Board, row, col int) int {
 	return adjacentMines
 }
 
-func IsMine(cells [][]Cell, row, col int) bool {
-	return cells[row][col].value == -1
+func getBoardHeight() int {
+	return len(board)
 }
 
-func (board *Board) IsRevealed(row, col int) bool {
-	return board.cells[row][col].isRevealed
+func getBoardWidth() int {
+	return len(board[0])
 }
 
-func (board *Board) IsFlagged(row, col int) bool {
-	return board.cells[row][col].isFlagged
+func IsRevealed(row, col int) bool {
+	return board[row][col].isRevealed
 }
 
-func (board *Board) FlagCell(row, col int) {
-	board.cells[row][col].isFlagged = !board.cells[row][col].isFlagged
+func IsFlagged(row, col int) bool {
+	return board[row][col].isFlagged
 }
 
-func (board *Board) RevealCell(row, col int) {
-	board.cells[row][col].isRevealed = true
+func FlagCell(row, col int) {
+	if flagsLeft == 0 && !IsFlagged(row, col) {
+		return
+	}
+	board[row][col].isFlagged = !board[row][col].isFlagged
 }
 
-// TODO: Reveal or GetCell function
+func RevealCell(row, col int) {
+	if board[row][col].isRevealed == false {
+		board[row][col].isRevealed = true
+		unRevealedCells--
+	}
+}
+
+func GetCellType(row, col int) CellType {
+	if board[row][col].value == -1 {
+		return MineCell
+	} else if board[row][col].value == 0 {
+		return EmptyCell
+	}
+	return ValueCell
+}
+
+func IsLost() bool {
+	for row := range board {
+		for col := range board[row] {
+			if GetCellType(row, col) == MineCell && IsRevealed(row, col) {
+				return true
+			}
+		}
+	}
+
+	return false
+}
+
+func IsSolved() bool {
+	if unRevealedCells == minesCount && !IsLost() {
+		return true
+	}
+
+	return false
+}
