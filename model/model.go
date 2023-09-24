@@ -90,15 +90,35 @@ func FlagCell(row, col int) {
 	board[row][col].isFlagged = !board[row][col].isFlagged
 }
 
+// Will only be called on cell if not already revealed and not flagged
 func RevealCell(row, col int) {
-	if board[row][col].isRevealed == false {
-		board[row][col].isRevealed = true
-		unRevealedCells--
-	}
+	board[row][col].isRevealed = true
+	unRevealedCells--
 }
 
-func RevealEmptyCells(row, col int) {
+// Will only be called on an EMPTY cell if not already revealed and not flagged
+func RevealEmptyCell(row, col int) {
+	board[row][col].isRevealed = true
+	unRevealedCells--
 
+	directions := []struct{dirRow, dirCol int}{
+		{-1, -1}, {-1, 0}, {-1, 1},
+		{0, -1},           {0, 1},
+		{1, -1},  {1, 0},  {1, 1},
+	}
+	
+	for _, direction := range directions {
+		r, c := row + direction.dirRow, col + direction.dirCol
+
+		// Check if the adjacent cell is within the board boundaries
+		if r >= 0 && r < getBoardHeight() && c >= 0 && c < getBoardWidth() {
+			if GetCellType(r, c) == ValueCell {
+				RevealCell(r, c)
+			} else if GetCellType(r, c) == EmptyCell {
+				RevealEmptyCell(r, c)
+			}
+		}
+	} 
 }
 
 func GetCellType(row, col int) CellType {
