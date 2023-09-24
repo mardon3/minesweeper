@@ -10,10 +10,11 @@ func LeftClickCell(row, col int) {
 		return
 	}
 
-	if model.GetCellType(row, col) == model.ValueCell {
-		model.RevealCell(row, col)
+	// if empty, reveal adjacent empty cells and their adjacent cells until all adjacent empty cells are revealed
+	if model.GetCellType(row, col) == model.EmptyCell {
+
 	} else {
-		// if empty, reveal adjacent empty cells and their adjacent cells until all adjacent empty cells are revealed
+		model.RevealCell(row, col)
 	}
 }
 
@@ -22,12 +23,6 @@ func RightClickCell(row, col int) {
 	model.FlagCell(row, col)
 }
 
-func SelectDifficulty() {
-}
-
-func ClickResetGame() {
-}
-
-func NewBoard(row, col, mines int) {
-	model.NewBoard(row, col, mines)
+func NewBoard(BoardDifficulty model.Difficulty) {
+	model.NewBoard(BoardDifficulty)
 }

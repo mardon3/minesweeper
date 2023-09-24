@@ -15,29 +15,19 @@ var flagsLeft int
 var minesCount int
 var unRevealedCells int
 
-// Enum type for cell types
-type CellType int
-
-// Enums for cell types
-const (
-	MineCell CellType = iota
-	EmptyCell 
-	ValueCell 
-)
-
-func NewBoard(height, width, mines int) {
-	flagsLeft, minesCount = mines, mines
-	unRevealedCells = height * width
-	board = make([][]Cell, height)
+func NewBoard(BoardDifficulty Difficulty) {
+	flagsLeft, minesCount = BoardDifficulty.Mines, BoardDifficulty.Mines
+	unRevealedCells = BoardDifficulty.Height * BoardDifficulty.Width
+	board = make([][]Cell, BoardDifficulty.Height)
 
 	for i := range board {
-		board[i] = make([]Cell, width)
+		board[i] = make([]Cell, BoardDifficulty.Width)
 	}
 
 	placedMines := 0
-	for placedMines < mines {
-		row := rand.Intn(height)
-		col := rand.Intn(width)
+	for placedMines < BoardDifficulty.Mines {
+		row := rand.Intn(BoardDifficulty.Height)
+		col := rand.Intn(BoardDifficulty.Width)
 
 		if GetCellType(row, col) != MineCell {
 			board[row][col].value = -1
@@ -105,6 +95,10 @@ func RevealCell(row, col int) {
 		board[row][col].isRevealed = true
 		unRevealedCells--
 	}
+}
+
+func RevealEmptyCells(row, col int) {
+
 }
 
 func GetCellType(row, col int) CellType {
