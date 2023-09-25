@@ -114,7 +114,7 @@ func FlagCell(row, col int) {
 }
 
 func RevealCell(row, col int) {
-	// When an entier region is being cleared, and there's an incorrectly flagged cell
+	// When an entire region is being cleared, and there's an incorrectly flagged cell
 	if IsFlagged(row, col) {
 		flagsLeft++
 	}
@@ -125,7 +125,7 @@ func RevealCell(row, col int) {
 }
 
 func RevealEmptyCell(row, col int) {
-	// When an entier region is being cleared, and there's an incorrectly flagged cell
+	// When an entire region is being cleared, and there's an incorrectly flagged cell
 	if IsFlagged(row, col) {
 		flagsLeft++
 	}
