@@ -1,6 +1,7 @@
 package model
 
 import (
+	"image/color"
 	"math/rand"
 )
 
@@ -8,14 +9,18 @@ type Cell struct {
 	value int // 0-8 for number of mines in the adjacent cells, -1 for mine
 	isRevealed bool
 	isFlagged bool
+	color color.Color
 }
 
-var board [][]Cell
-var flagsLeft int
-var minesCount int
-var unRevealedCells int
-var currDifficulty Difficulty = Beginner
-var firstClick bool
+var ( 
+	board [][]Cell
+	flagsLeft int
+	minesCount int
+	unRevealedCells int
+	currDifficulty Difficulty = Beginner
+	firstClick bool
+)
+
 
 func NewBoard(boardDifficulty ...Difficulty) {
 	if len(boardDifficulty) == 1 {
@@ -45,6 +50,7 @@ func NewBoard(boardDifficulty ...Difficulty) {
 
 	for row := range board {
 		for col := range board[row] {
+			board[row][col].color = color.RGBA{114, 199, 255, 255}
 			if GetCellType(row, col) != MineCell {
 				board[row][col].value = countAdjacentMines(row, col)
 			}
@@ -133,6 +139,7 @@ func RevealCell(row, col int) {
 		flagsLeft++
 	}
 
+	board[row][col].color = color.RGBA{215, 240, 255, 255}
 	board[row][col].isFlagged = false
 	board[row][col].isRevealed = true
 	unRevealedCells--
@@ -144,6 +151,7 @@ func RevealEmptyCell(row, col int) {
 		flagsLeft++
 	}
 
+	board[row][col].color = color.RGBA{215, 240, 255, 255}
 	board[row][col].isFlagged = false
 	board[row][col].isRevealed = true
 	unRevealedCells--
