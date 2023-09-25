@@ -83,6 +83,10 @@ func getBoardWidth() int {
 	return len(board[0])
 }
 
+func GetBoard() [][]Cell {
+	return board
+}
+
 func GetCellType(row, col int) CellType {
 	if board[row][col].value == -1 {
 		return MineCell

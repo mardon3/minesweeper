@@ -36,3 +36,7 @@ func NewBoard(boardDifficulty ...model.Difficulty) {
 		panic("Too many arguments passed to NewBoard")
 	}
 }
+
+func GetBoard() [][]model.Cell {
+	return model.GetBoard()
+}
