@@ -246,3 +246,7 @@ func updateAdjacentCells(currRow, currCol int) {
 		}
 	}
 }
+
+func GetColor(row, col int) color.Color {
+	return board[row][col].color
+}

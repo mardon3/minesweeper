@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"image/color"
 	"musmanov/minesweeper/model"
 )
 
@@ -43,4 +44,8 @@ func GetBoard() [][]model.Cell {
 
 func GetScreenSize() (int, int) {
 	return model.GetScreenSize()
+}
+
+func GetColor(row, col int) color.Color {
+	return model.GetColor(row, col)
 }
