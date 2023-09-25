@@ -12,7 +12,7 @@ func LeftClickCell(row, col int) {
 
 	// if empty, reveal adjacent empty cells and their adjacent cells until all adjacent empty cells are revealed
 	if model.GetCellType(row, col) == model.EmptyCell {
-
+		model.RevealEmptyCell(row, col)
 	} else {
 		model.RevealCell(row, col)
 	}
@@ -23,6 +23,6 @@ func RightClickCell(row, col int) {
 	model.FlagCell(row, col)
 }
 
-func NewBoard(BoardDifficulty model.Difficulty) {
-	model.NewBoard(BoardDifficulty)
+func NewBoard(boardDifficulty model.Difficulty) {
+	model.NewBoard(boardDifficulty)
 }
