@@ -104,17 +104,32 @@ func IsFlagged(row, col int) bool {
 func FlagCell(row, col int) {
 	if flagsLeft == 0 && !IsFlagged(row, col) {
 		return
+	} else if IsFlagged(row, col) {
+		flagsLeft++
+	} else {
+		flagsLeft--
 	}
+	
 	board[row][col].isFlagged = !board[row][col].isFlagged
 }
 
 func RevealCell(row, col int) {
+	// When an entier region is being cleared, and there's an incorrectly flagged cell
+	if IsFlagged(row, col) {
+		flagsLeft++
+	}
+
 	board[row][col].isFlagged = false
 	board[row][col].isRevealed = true
 	unRevealedCells--
 }
 
 func RevealEmptyCell(row, col int) {
+	// When an entier region is being cleared, and there's an incorrectly flagged cell
+	if IsFlagged(row, col) {
+		flagsLeft++
+	}
+
 	board[row][col].isFlagged = false
 	board[row][col].isRevealed = true
 	unRevealedCells--
