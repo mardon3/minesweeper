@@ -7,7 +7,7 @@ type Difficulty struct {
     Mines    int
 }
 
-// Constants for different difficulty levels
+// Different difficulty levels
 var (
     Beginner     = Difficulty{Height: 9, Width: 9, Mines: 10}
     Intermediate = Difficulty{Height: 16, Width: 16, Mines: 40}
