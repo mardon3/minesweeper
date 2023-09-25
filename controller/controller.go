@@ -26,6 +26,13 @@ func RightClickCell(row, col int) {
 	model.FlagCell(row, col)
 }
 
-func NewBoard(boardDifficulty model.Difficulty) {
-	model.NewBoard(boardDifficulty)
+// New/reset game
+func NewBoard(boardDifficulty ...model.Difficulty) {
+	if len(boardDifficulty) == 1 {
+		model.NewBoard(boardDifficulty[0])
+	} else if len(boardDifficulty) == 0 {
+		model.NewBoard()
+	} else {
+		panic("Too many arguments passed to NewBoard")
+	}
 }
