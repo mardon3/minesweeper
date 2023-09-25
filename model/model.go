@@ -87,6 +87,10 @@ func GetBoard() [][]Cell {
 	return board
 }
 
+func GetScreenSize() (int, int) {
+	return currDifficulty.Width * 30, currDifficulty.Height * 30 + 50
+}
+
 func GetCellType(row, col int) CellType {
 	if board[row][col].value == -1 {
 		return MineCell

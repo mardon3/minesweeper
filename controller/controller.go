@@ -40,3 +40,7 @@ func NewBoard(boardDifficulty ...model.Difficulty) {
 func GetBoard() [][]model.Cell {
 	return model.GetBoard()
 }
+
+func GetScreenSize() (int, int) {
+	return model.GetScreenSize()
+}
