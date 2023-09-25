@@ -10,10 +10,13 @@ func LeftClickCell(row, col int) {
 		return
 	}
 
+	// Ensures that the first click is always safe
+	model.SafeStart(row, col)
+
 	// if empty, reveal adjacent empty cells and their adjacent cells until all adjacent empty cells are revealed
 	if model.GetCellType(row, col) == model.EmptyCell {
 		model.RevealEmptyCell(row, col)
-	} else {
+	} else { 
 		model.RevealCell(row, col)
 	}
 }

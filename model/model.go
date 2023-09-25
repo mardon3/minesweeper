@@ -14,20 +14,28 @@ var board [][]Cell
 var flagsLeft int
 var minesCount int
 var unRevealedCells int
+var currDifficulty Difficulty = Beginner
+var firstClick bool
 
-func NewBoard(BoardDifficulty Difficulty) {
-	flagsLeft, minesCount = BoardDifficulty.Mines, BoardDifficulty.Mines
-	unRevealedCells = BoardDifficulty.Height * BoardDifficulty.Width
-	board = make([][]Cell, BoardDifficulty.Height)
+func NewBoard(boardDifficulty ...Difficulty) {
+	if len(boardDifficulty) == 1 {
+		currDifficulty = boardDifficulty[0]
+	} else if len(boardDifficulty) > 1 {
+		panic("Too many arguments passed to NewBoard")
+	}
+	firstClick = true
+	flagsLeft, minesCount = currDifficulty.Mines, currDifficulty.Mines
+	unRevealedCells = currDifficulty.Height * currDifficulty.Width
+	board = make([][]Cell, currDifficulty.Height)
 
 	for i := range board {
-		board[i] = make([]Cell, BoardDifficulty.Width)
+		board[i] = make([]Cell, currDifficulty.Width)
 	}
 
 	placedMines := 0
-	for placedMines < BoardDifficulty.Mines {
-		row := rand.Intn(BoardDifficulty.Height)
-		col := rand.Intn(BoardDifficulty.Width)
+	for placedMines < currDifficulty.Mines {
+		row := rand.Intn(currDifficulty.Height)
+		col := rand.Intn(currDifficulty.Width)
 
 		if GetCellType(row, col) != MineCell {
 			board[row][col].value = -1
@@ -44,7 +52,7 @@ func NewBoard(BoardDifficulty Difficulty) {
 	}
 }
 
-func countAdjacentMines(row, col int) int {
+func countAdjacentMines(currRow, currCol int) int {
 	adjacentMines := 0
 
 	directions := []struct{dirRow, dirCol int}{
@@ -54,7 +62,7 @@ func countAdjacentMines(row, col int) int {
 	}
 
 	for _, direction := range directions {
-		r, c := row + direction.dirRow, col + direction.dirCol
+		r, c := currRow + direction.dirRow, currCol + direction.dirCol
 
 		// Check if the adjacent cell is within the board boundaries
 		if r >= 0 && r < getBoardHeight() && c >= 0 && c < getBoardWidth() {
@@ -75,6 +83,16 @@ func getBoardWidth() int {
 	return len(board[0])
 }
 
+func GetCellType(row, col int) CellType {
+	if board[row][col].value == -1 {
+		return MineCell
+	} else if board[row][col].value == 0 {
+		return EmptyCell
+	}
+
+	return ValueCell
+}
+
 func IsRevealed(row, col int) bool {
 	return board[row][col].isRevealed
 }
@@ -90,14 +108,14 @@ func FlagCell(row, col int) {
 	board[row][col].isFlagged = !board[row][col].isFlagged
 }
 
-// Will only be called on cell if not already revealed and not flagged
 func RevealCell(row, col int) {
+	board[row][col].isFlagged = false
 	board[row][col].isRevealed = true
 	unRevealedCells--
 }
 
-// Will only be called on an EMPTY cell if not already revealed and not flagged
 func RevealEmptyCell(row, col int) {
+	board[row][col].isFlagged = false
 	board[row][col].isRevealed = true
 	unRevealedCells--
 
@@ -121,15 +139,6 @@ func RevealEmptyCell(row, col int) {
 	} 
 }
 
-func GetCellType(row, col int) CellType {
-	if board[row][col].value == -1 {
-		return MineCell
-	} else if board[row][col].value == 0 {
-		return EmptyCell
-	}
-	return ValueCell
-}
-
 func IsLost() bool {
 	for row := range board {
 		for col := range board[row] {
@@ -148,4 +157,55 @@ func IsSolved() bool {
 	}
 
 	return false
+}
+
+func SafeStart(row, col int) {
+	if !firstClick {
+		return
+	}
+
+	if GetCellType(row, col) == MineCell {
+		// Iterate from the bottom right of board to the top left
+		for r := getBoardHeight() - 1; r >= 0; r-- {
+			for c := getBoardWidth() - 1; c >= 0; c-- {
+				if GetCellType(r, c) != MineCell {
+					// Swap the cell with the given cell as param and adjust adjacent cells accordingly
+					swapCells(row, col, r, c)
+				}
+			}
+		}	
+	}
+
+	firstClick = false
+}
+
+func swapCells(row1, col1, row2, col2 int) {
+	board[row1][col1], board[row2][col2] = board[row2][col2], board[row1][col1]
+
+	board[row1][col1].value = countAdjacentMines(row1, col1)
+
+	updateAdjacentCells(row1, col1)
+	updateAdjacentCells(row2, col2)
+}
+
+// Update surrounding cells in-case of a cell swap for a safe start
+func updateAdjacentCells(currRow, currCol int) {
+	directions := []struct{dirRow, dirCol int}{
+		{-1, -1}, {-1, 0}, {-1, 1},
+		{0, -1},           {0, 1},
+		{1, -1},  {1, 0},  {1, 1},
+	}
+
+	for _, direction := range directions {
+		r, c := currRow + direction.dirRow, currCol + direction.dirCol
+
+		// Check if the adjacent cell is within the board boundaries
+		if r >= 0 && r < getBoardHeight() && c >= 0 && c < getBoardWidth() {
+			if GetCellType(currRow, currCol) == MineCell && GetCellType(r, c) != MineCell {
+				board[r][c].value++
+			} else if GetCellType(currRow, currCol) != MineCell && GetCellType(r, c) != MineCell {
+				board[r][c].value--
+			}
+		}
+	}
 }
