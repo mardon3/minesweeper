@@ -1,6 +1,6 @@
 package model
 
-// Difficulty is a custom type representing a tuple of three integers
+// Difficulty is a struct  representing a board's dimensions and mines count
 type Difficulty struct {
     Height   int
     Width    int
