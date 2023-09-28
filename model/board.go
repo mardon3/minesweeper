@@ -95,11 +95,11 @@ func GetBoard() [][]Cell {
 
 func GetScreenSize() (int, int) {
 	if currDifficulty == Beginner {
-		return (currDifficulty.Width * 40), (currDifficulty.Height * 40) + 60
+		return ((currDifficulty.Width + 1) * 40), ((currDifficulty.Height + 1) * 40) + 60
 	} else if currDifficulty == Intermediate {
-		return (currDifficulty.Width * 32), (currDifficulty.Height * 32) + 60
+		return ((currDifficulty.Width + 1) * 32), ((currDifficulty.Height + 1) * 32) + 60
 	} else {
-		return (currDifficulty.Width * 30), (currDifficulty.Height * 30) + 60
+		return ((currDifficulty.Width + 1) * 30), ((currDifficulty.Height + 1) * 30) + 60
 	}
 }
 
