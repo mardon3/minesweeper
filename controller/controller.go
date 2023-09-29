@@ -53,3 +53,11 @@ func GetColor(row, col int) color.Color {
 func GetDifficulty() model.Difficulty {
 	return model.GetDifficulty()
 }
+
+func IsLost() bool {
+	return model.IsLost()
+}
+
+func IsSolved() bool {
+	return model.IsSolved()
+}
