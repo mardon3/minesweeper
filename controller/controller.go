@@ -49,3 +49,7 @@ func GetScreenSize() (int, int) {
 func GetColor(row, col int) color.Color {
 	return model.GetColor(row, col)
 }
+
+func GetDifficulty() model.Difficulty {
+	return model.GetDifficulty()
+}
