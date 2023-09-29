@@ -42,7 +42,6 @@ func NewUI(boardDifficulty ...model.Difficulty) *ebitenui.UI {
 	NewRootContainer()
 	ebiten.SetWindowSize(800, 600)
 	ebiten.SetWindowTitle("Minesweeper")
-	ebiten.SetWindowResizingMode(ebiten.WindowResizingModeEnabled)
 	ui := ebitenui.UI{
 		Container: NewRootContainer(),
 	}
