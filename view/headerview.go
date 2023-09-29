@@ -2,24 +2,40 @@ package view
 
 import (
 	"image/color"
+	"musmanov/minesweeper/controller"
 	"musmanov/minesweeper/model"
 
 	"github.com/ebitenui/ebitenui/image"
 	"github.com/ebitenui/ebitenui/widget"
 	"github.com/golang/freetype/truetype"
+	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"golang.org/x/image/font"
-	"golang.org/x/image/font/gofont/goregular"
 )
 
-/*
-The Grid Layout is built to position children in a rows and columns.
-*/
+const (
+	fontRobotoBoldPath = "assets/fonts/Roboto-Bold.ttf"
+	emoteHYPERSPath    = "assets/emotes/HYPERS.png"
+	emotePepeHandsPath = "assets/emotes/PepeHands.png"
+	emotePepoThinkPath = "assets/emotes/PepoThink.png"
+)
+
 func NewHeaderContainer() *widget.Container {
 	// load images for button states: idle, hover, and pressed
 	buttonImage, _ := loadButtonImage()
+	// load images for emotes
+	emoteImage, _ := loadEmoteImage()
 
-	// load button text font
-	face, _ := loadFont(14)
+	robotoBoldFace, _ := loadAssetFont(fontRobotoBoldPath, 14)
+
+	var resetEmoteIcon *ebiten.Image
+	if controller.IsSolved() {
+		resetEmoteIcon, _ = loadButtonIcon(emoteHYPERSPath)
+	} else if controller.IsLost() {
+		resetEmoteIcon, _ = loadButtonIcon(emotePepeHandsPath)
+	} else {
+		resetEmoteIcon, _ = loadButtonIcon(emotePepoThinkPath)
+	}
 
 	headerCountainer := widget.NewContainer(
 		// the container will use a plain color as its background
@@ -38,7 +54,7 @@ func NewHeaderContainer() *widget.Container {
 		),
 	)
 
-	button := widget.NewButton(
+	difficultyButton := widget.NewButton(
 		// set general widget options
 		widget.ButtonOpts.WidgetOpts(
 			// instruct the container's anchor layout to center the button both horizontally and vertically
@@ -51,7 +67,7 @@ func NewHeaderContainer() *widget.Container {
 		widget.ButtonOpts.Image(buttonImage),
 
 		// specify the button's text, the font face, and the color
-		widget.ButtonOpts.Text("Toggle Difficulty", face, &widget.ButtonTextColor{
+		widget.ButtonOpts.Text("Toggle Difficulty", robotoBoldFace, &widget.ButtonTextColor{
 			Idle: color.NRGBA{0, 0, 0, 255},
 		}),
 
@@ -65,15 +81,44 @@ func NewHeaderContainer() *widget.Container {
 
 		// add a handler that reacts to clicking the button
 		widget.ButtonOpts.ClickedHandler(func(args *widget.ButtonClickedEventArgs) {
+			switch controller.GetDifficulty() {
+			case model.Beginner:
+				NewUI(model.Intermediate)
+			case model.Intermediate:
+				NewUI(model.Expert)
+			case model.Expert:
+				NewUI(model.Beginner)
+			}
+		}),
+	)
+	headerCountainer.AddChild(difficultyButton)
+
+	resetButtonStackContainer := widget.NewContainer(
+		widget.ContainerOpts.Layout(widget.NewStackedLayout()),
+		// instruct the container's anchor layout to center the button both horizontally and vertically;
+		// since our button is a 2-widget object, we add the anchor info to the wrapping container
+		// instead of the button
+		widget.ContainerOpts.WidgetOpts(widget.WidgetOpts.LayoutData(widget.AnchorLayoutData{
+			HorizontalPosition: widget.AnchorLayoutPositionCenter,
+			VerticalPosition:   widget.AnchorLayoutPositionCenter,
+		})),
+	)
+
+	resetButton  := widget.NewButton(
+		widget.ButtonOpts.Image(emoteImage),
+		
+		// add a handler that reacts to clicking the button
+		widget.ButtonOpts.ClickedHandler(func(args *widget.ButtonClickedEventArgs) {
 			println("button clicked")
 		}),
 	)
-
-	headerCountainer.AddChild(button)
+	resetButtonStackContainer.AddChild(resetButton)
+	resetButtonStackContainer.AddChild(widget.NewGraphic(widget.GraphicOpts.Image(resetEmoteIcon)))
+	
+	headerCountainer.AddChild(resetButtonStackContainer)
 
 	return headerCountainer
 }
-
 
 func loadButtonImage() (*widget.ButtonImage, error) {
 	idle := image.NewNineSliceColor(color.NRGBA{R: 255, G: 255, B: 255, A: 255})
@@ -89,8 +134,27 @@ func loadButtonImage() (*widget.ButtonImage, error) {
 	}, nil
 }
 
-func loadFont(size float64) (font.Face, error) {
-	ttfFont, err := truetype.Parse(goregular.TTF)
+func loadEmoteImage() (*widget.ButtonImage, error) {
+	idle := image.NewNineSliceColor(model.HeaderBackgroundColor)
+	// Darker version of HeaderBackgroundColor to simulate a hover
+	hover := image.NewNineSliceColor(color.NRGBA{10, 27, 52, 255})
+	// Even darker version of HeaderBackgroundColor to simulate a press
+	pressed := image.NewNineSliceColor(color.NRGBA{5, 13, 26, 255})
+
+	return &widget.ButtonImage{
+		Idle:    idle,
+		Hover:   hover,
+		Pressed: pressed,
+	}, nil
+}
+
+func loadAssetFont(path string, size float64) (font.Face, error) {
+	fontData, err := embeddedAssets.ReadFile(path)
+	if err != nil {
+		return nil, err
+	}
+
+	ttfFont, err := truetype.Parse(fontData)
 	if err != nil {
 		return nil, err
 	}
@@ -100,4 +164,15 @@ func loadFont(size float64) (font.Face, error) {
 		DPI:     72,
 		Hinting: font.HintingFull,
 	}), nil
+}
+
+func loadButtonIcon(path string) (*ebiten.Image, error) {
+	f, err := embeddedAssets.Open(path)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+	image, _, err := ebitenutil.NewImageFromReader(f)
+
+	return image, err
 }
