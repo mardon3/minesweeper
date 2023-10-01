@@ -11,8 +11,6 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
-
-
 func NewRootContainer() *widget.Container {
 	rootContainer := widget.NewContainer(
 		// the container will use a plain color as its background
@@ -31,15 +29,15 @@ func NewRootContainer() *widget.Container {
 		)),
 	)
 
-	rootContainer.AddChild(NewHeaderContainer())
+	rootContainer.AddChild(RenderHeader())
 	rootContainer.AddChild(NewBoardContainer())
 
 	return rootContainer
 }
+
 // Generates a new board
 func NewUI(boardDifficulty ...model.Difficulty) *ebitenui.UI {
 	controller.NewBoard(boardDifficulty...)
-	NewRootContainer()
 	ebiten.SetWindowSize(800, 600)
 	ebiten.SetWindowTitle("Minesweeper")
 	ui := ebitenui.UI{
