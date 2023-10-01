@@ -3,6 +3,7 @@ package model
 import (
 	"image/color"
 	"math/rand"
+	"strconv"
 )
 
 type Cell struct {
@@ -104,8 +105,18 @@ func GetScreenSize() (int, int) {
 	}
 }
 
-func GetDifficulty() Difficulty {
-	return currDifficulty
+func GetDifficultyString() string {
+	if currDifficulty == Beginner {
+		return "Beginner"
+	} else if currDifficulty == Intermediate {
+		return "Intermediate"
+	} else {
+		return "Expert"
+	}
+}
+
+func GetMineCount() int {
+	return minesCount
 }
 
 func GetCellType(row, col int) CellType {
@@ -254,4 +265,8 @@ func updateAdjacentCells(currRow, currCol int) {
 
 func GetColor(row, col int) color.Color {
 	return board[row][col].color
+}
+
+func GetFlagsString() string {
+	return strconv.Itoa(flagsLeft)
 }

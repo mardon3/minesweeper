@@ -50,8 +50,8 @@ func GetColor(row, col int) color.Color {
 	return model.GetColor(row, col)
 }
 
-func GetDifficulty() model.Difficulty {
-	return model.GetDifficulty()
+func GetDifficultyString() string {
+	return model.GetDifficultyString()
 }
 
 func IsLost() bool {
@@ -60,4 +60,12 @@ func IsLost() bool {
 
 func IsSolved() bool {
 	return model.IsSolved()
+}
+
+func GetMineCount() int {
+	return model.GetMineCount()
+}
+
+func GetFlagsString() string {
+	return model.GetFlagsString()
 }
