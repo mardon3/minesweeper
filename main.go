@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"musmanov/minesweeper/controller"
 	"musmanov/minesweeper/view"
 
 	"github.com/ebitenui/ebitenui"
@@ -13,9 +14,6 @@ type Game struct {
 	ui *ebitenui.UI
 }
 
-/*
-The Grid Layout is built to position children in a rows and columns.
-*/
 func main() {
 	game := Game{
 		ui: view.NewUI(),
@@ -36,6 +34,16 @@ func (g *Game) Layout(outsideWidth int, outsideHeight int) (int, int) {
 // Update implements Game.
 func (g *Game) Update() error {
 	// update the UI
+	if controller.IsSolved() {
+		view.ResetEmoteGraphic.Image = view.HypersIcon
+	} else if controller.IsLost() {
+		view.ResetEmoteGraphic.Image = view.PepeHandsIcon
+	} else {
+		view.ResetEmoteGraphic.Image = view.PepoThinkIcon
+	}
+
+	view.FlagsCounterText.Label = controller.GetFlagsString()
+
 	g.ui.Update()
 	return nil
 }
