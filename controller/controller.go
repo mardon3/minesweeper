@@ -69,3 +69,11 @@ func GetMineCount() int {
 func GetFlagsString() string {
 	return model.GetFlagsString()
 }
+
+func GetBoardHeight() int {
+	return model.GetBoardHeight()
+}
+
+func GetBoardWidth() int {
+	return model.GetBoardWidth()
+}

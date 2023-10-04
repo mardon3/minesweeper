@@ -72,7 +72,7 @@ func countAdjacentMines(currRow, currCol int) int {
 		r, c := currRow + direction.dirRow, currCol + direction.dirCol
 
 		// Check if the adjacent cell is within the board boundaries
-		if r >= 0 && r < getBoardHeight() && c >= 0 && c < getBoardWidth() {
+		if r >= 0 && r < GetBoardHeight() && c >= 0 && c < GetBoardWidth() {
 			if GetCellType(r, c) == MineCell {
 				adjacentMines++
 			}
@@ -82,11 +82,11 @@ func countAdjacentMines(currRow, currCol int) int {
 	return adjacentMines
 }
 
-func getBoardHeight() int {
+func GetBoardHeight() int {
 	return len(board)
 }
 
-func getBoardWidth() int {
+func GetBoardWidth() int {
 	return len(board[0])
 }
 
@@ -182,7 +182,7 @@ func RevealEmptyCell(row, col int) {
 		r, c := row + direction.dirRow, col + direction.dirCol
 
 		// Check if the adjacent cell is within the board boundaries
-		if r >= 0 && r < getBoardHeight() && c >= 0 && c < getBoardWidth() {
+		if r >= 0 && r < GetBoardHeight() && c >= 0 && c < GetBoardWidth() {
 			if GetCellType(r, c) == ValueCell {
 				RevealCell(r, c)
 			} else if GetCellType(r, c) == EmptyCell {
@@ -219,8 +219,8 @@ func SafeStart(row, col int) {
 
 	if GetCellType(row, col) == MineCell {
 		// Iterate from the bottom right of board to the top left
-		for r := getBoardHeight() - 1; r >= 0; r-- {
-			for c := getBoardWidth() - 1; c >= 0; c-- {
+		for r := GetBoardHeight() - 1; r >= 0; r-- {
+			for c := GetBoardWidth() - 1; c >= 0; c-- {
 				if GetCellType(r, c) != MineCell {
 					// Swap the cell with the given cell as param and adjust adjacent cells accordingly
 					swapCells(row, col, r, c)
@@ -253,7 +253,7 @@ func updateAdjacentCells(currRow, currCol int) {
 		r, c := currRow + direction.dirRow, currCol + direction.dirCol
 
 		// Check if the adjacent cell is within the board boundaries
-		if r >= 0 && r < getBoardHeight() && c >= 0 && c < getBoardWidth() {
+		if r >= 0 && r < GetBoardHeight() && c >= 0 && c < GetBoardWidth() {
 			if GetCellType(currRow, currCol) == MineCell && GetCellType(r, c) != MineCell {
 				board[r][c].value++
 			} else if GetCellType(currRow, currCol) != MineCell && GetCellType(r, c) != MineCell {
