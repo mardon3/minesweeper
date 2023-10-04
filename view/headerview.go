@@ -49,6 +49,12 @@ func newHeaderContainer() *widget.Container {
 			//Set how far apart to space the children
 			widget.RowLayoutOpts.Spacing(10),
 		)),
+		widget.ContainerOpts.WidgetOpts(
+			widget.WidgetOpts.LayoutData(widget.GridLayoutData{
+				MaxHeight: 72,
+			}),
+			widget.WidgetOpts.MinSize(800, 72),
+		),
 	)
 
 	return headerCountainer
