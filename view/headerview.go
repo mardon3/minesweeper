@@ -11,7 +11,6 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 	"golang.org/x/image/font"
-	"golang.org/x/image/font/gofont/goregular"
 )
 
 const (
@@ -233,18 +232,6 @@ func loadBackgroundMatchingImage() (*widget.ButtonImage, error) {
 	}, nil
 }
 
-// Background color the same as container, and button is not pressable
-func loadNonPressableButtonImage() (*widget.ButtonImage, error) {
-	idle := image.NewNineSliceColor(model.HeaderBackgroundColor)
-	hover, pressed := idle, idle
-
-	return &widget.ButtonImage{
-		Idle:    idle,
-		Hover:   hover,
-		Pressed: pressed,
-	}, nil
-}
-
 func loadAssetFont(path string, size float64) (font.Face, error) {
 	fontData, err := embeddedAssets.ReadFile(path)
 	if err != nil {
@@ -272,17 +259,4 @@ func loadButtonIcon(path string) (*ebiten.Image, error) {
 	image, _, err := ebitenutil.NewImageFromReader(f)
 
 	return image, err
-}
-
-func loadFont(size float64) (font.Face, error) {
-	ttfFont, err := truetype.Parse(goregular.TTF)
-	if err != nil {
-		return nil, err
-	}
-
-	return truetype.NewFace(ttfFont, &truetype.Options{
-		Size:    size,
-		DPI:     72,
-		Hinting: font.HintingFull,
-	}), nil
 }
