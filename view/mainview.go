@@ -15,13 +15,10 @@ func NewRootContainer() *widget.Container {
 	rootContainer := widget.NewContainer(
 		// the container will use a plain color as its background
 		widget.ContainerOpts.BackgroundImage(image.NewNineSliceColor(color.White)),
-		// the container will use an anchor layout to layout its single child widget
+		// the container will use a single column layout, header on top, board on bottom
 		widget.ContainerOpts.Layout(widget.NewGridLayout(
-			//Define number of columns in the grid
 			widget.GridLayoutOpts.Columns(1),
-			//Define how much padding to inset the child content
 			widget.GridLayoutOpts.Padding(widget.NewInsetsSimple(0)),
-			//Define how far apart the rows and columns should be
 			widget.GridLayoutOpts.Spacing(0, 0),
 			//Define how to stretch the rows and columns. Note it is required to
 			//specify the Stretch for each row and column.
@@ -38,7 +35,8 @@ func NewRootContainer() *widget.Container {
 // Generates a new board
 func NewUI(boardDifficulty ...model.Difficulty) *ebitenui.UI {
 	controller.NewBoard(boardDifficulty...)
-	ebiten.SetWindowSize(800, 600)
+	// To keep board square size, since header is set to 72 pixels height
+	ebiten.SetWindowSize(800, 872)
 	ebiten.SetWindowTitle("Minesweeper")
 	ui := ebitenui.UI{
 		Container: NewRootContainer(),
