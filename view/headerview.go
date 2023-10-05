@@ -222,7 +222,6 @@ func loadButtonImage() (*widget.ButtonImage, error) {
 	}, nil
 }
 
-
 // Background color the same as acontainer
 func loadBackgroundMatchingImage() (*widget.ButtonImage, error) {
 	idle := image.NewNineSliceColor(model.HeaderBackgroundColor)
