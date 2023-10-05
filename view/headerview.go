@@ -114,9 +114,8 @@ func newResetButtonStackContainer() *widget.Container {
 		// instruct the container's anchor layout to center the button both horizontally and vertically;
 		// since our button is a 2-widget object, we add the anchor info to the wrapping container
 		// instead of the button
-		widget.ContainerOpts.WidgetOpts(widget.WidgetOpts.LayoutData(widget.AnchorLayoutData{
-			HorizontalPosition: widget.AnchorLayoutPositionCenter,
-			VerticalPosition:   widget.AnchorLayoutPositionCenter,
+		widget.ContainerOpts.WidgetOpts(widget.WidgetOpts.LayoutData(widget.RowLayoutData{
+			Position: widget.RowLayoutPositionCenter,
 		})),
 	)
 
