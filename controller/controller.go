@@ -77,3 +77,11 @@ func GetBoardHeight() int {
 func GetBoardWidth() int {
 	return model.GetBoardWidth()
 }
+
+func IsRevealed(row, col int) bool {
+	return model.IsRevealed(row, col)
+}
+
+func IsFlagged(row, col int) bool {
+	return model.IsFlagged(row, col)
+}
