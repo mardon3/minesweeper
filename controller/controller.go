@@ -85,3 +85,7 @@ func IsRevealed(row, col int) bool {
 func IsFlagged(row, col int) bool {
 	return model.IsFlagged(row, col)
 }
+
+func GetCellType(row, col int) model.CellType {
+	return model.GetCellType(row, col)
+}
