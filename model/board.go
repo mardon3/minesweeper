@@ -155,7 +155,7 @@ func RevealCell(row, col int) {
 		flagsLeft++
 	}
 
-	board[row][col].color = color.RGBA{215, 240, 255, 255}
+	board[row][col].color = color.RGBA{150, 200, 255, 255}
 	board[row][col].isFlagged = false
 	board[row][col].isRevealed = true
 	unRevealedCells--
@@ -167,7 +167,7 @@ func RevealEmptyCell(row, col int) {
 		flagsLeft++
 	}
 
-	board[row][col].color = color.RGBA{215, 240, 255, 255}
+	board[row][col].color = color.RGBA{150, 200, 255, 255}
 	board[row][col].isFlagged = false
 	board[row][col].isRevealed = true
 	unRevealedCells--
