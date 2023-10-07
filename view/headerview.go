@@ -38,7 +38,7 @@ var (
 
 func newHeaderContainer() *widget.Container {
 	headerCountainer := widget.NewContainer(
-		widget.ContainerOpts.BackgroundImage(image.NewNineSliceColor(model.HeaderBackgroundColor)),
+		widget.ContainerOpts.BackgroundImage(image.NewNineSliceColor(HeaderBackgroundColor)),
 		widget.ContainerOpts.Layout(widget.NewRowLayout(
 			//Which direction to layout children
 			widget.RowLayoutOpts.Direction(widget.DirectionHorizontal),
@@ -144,7 +144,7 @@ func newResetGraphic() *widget.Graphic {
 
 func newFlagRowContainer() *widget.Container {
 	flagRowContainer := widget.NewContainer(
-		widget.ContainerOpts.BackgroundImage(image.NewNineSliceColor(model.HeaderBackgroundColor)),
+		widget.ContainerOpts.BackgroundImage(image.NewNineSliceColor(HeaderBackgroundColor)),
 		widget.ContainerOpts.Layout(widget.NewRowLayout(
 			//Which direction to layout children
 			widget.RowLayoutOpts.Direction(widget.DirectionHorizontal),
@@ -168,7 +168,7 @@ func newHeaderFlag() *widget.Text {
 	flagFont, _ := loadAssetFont(fontFlagPath, 50)
 
 	headerFlag := widget.NewText(
-		widget.TextOpts.Text(";", flagFont, color.RGBA{255, 0, 0, 255}),
+		widget.TextOpts.Text(";", flagFont, color.NRGBA{255, 0, 0, 255}),
 		widget.TextOpts.Position(widget.TextPositionCenter, widget.TextPositionCenter),
 		widget.TextOpts.WidgetOpts(
 			widget.WidgetOpts.LayoutData(widget.RowLayoutData{
@@ -230,7 +230,7 @@ func loadButtonImage() (*widget.ButtonImage, error) {
 
 // Background color the same as acontainer
 func loadBackgroundMatchingImage() (*widget.ButtonImage, error) {
-	idle := image.NewNineSliceColor(model.HeaderBackgroundColor)
+	idle := image.NewNineSliceColor(HeaderBackgroundColor)
 	// Darker version of HeaderBackgroundColor to simulate a hover
 	hover := image.NewNineSliceColor(color.NRGBA{10, 27, 52, 255})
 	// Even darker version of HeaderBackgroundColor to simulate a press
