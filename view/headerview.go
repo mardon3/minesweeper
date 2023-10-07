@@ -15,7 +15,7 @@ import (
 
 const (
 	fontRobotoBoldPath   = "assets/fonts/Roboto-Bold.ttf"
-	headerFlagPath       = "assets/emotes/HeaderFlag.png"
+	fontFlagPath 		 = "assets/fonts/Flags.ttf"
 	emoteHYPERSPath      = "assets/emotes/HYPERS.png"
 	emotePepeHandsPath   = "assets/emotes/PepeHands.png"
 	emotePepoThinkPath   = "assets/emotes/PepoThink.png"
@@ -28,14 +28,12 @@ var (
 	ResetButton *widget.Button = newResetButton()
 	ResetEmoteGraphic *widget.Graphic = newResetGraphic()
 	FlagsCounterText *widget.Text = newFlagsCounterText()
-	HeaderFlagGraphic *widget.Graphic = newHeaderFlagGraphic()
+	HeaderFlagText *widget.Text = newHeaderFlag()
 	FlagRowContainer *widget.Container = newFlagRowContainer()
 	// Reset button emote graphics
 	HypersIcon, _ = loadButtonIcon(emoteHYPERSPath)
 	PepeHandsIcon, _ = loadButtonIcon(emotePepeHandsPath)
 	PepoThinkIcon, _ = loadButtonIcon(emotePepoThinkPath)
-	// Flag graphics
-	HeaderFlag, _ = loadButtonIcon(headerFlagPath)
 )
 
 func newHeaderContainer() *widget.Container {
@@ -166,11 +164,20 @@ func newFlagRowContainer() *widget.Container {
 	return flagRowContainer
 }
 
+func newHeaderFlag() *widget.Text {
+	flagFont, _ := loadAssetFont(fontFlagPath, 50)
 
-func newHeaderFlagGraphic() *widget.Graphic {
-	flagGraphic := widget.NewGraphic(widget.GraphicOpts.Image(HeaderFlag))
+	headerFlag := widget.NewText(
+		widget.TextOpts.Text(";", flagFont, color.RGBA{255, 0, 0, 255}),
+		widget.TextOpts.Position(widget.TextPositionCenter, widget.TextPositionCenter),
+		widget.TextOpts.WidgetOpts(
+			widget.WidgetOpts.LayoutData(widget.RowLayoutData{
+				Position: widget.RowLayoutPositionCenter,
+			}),
+		),
+	)
 
-	return flagGraphic
+	return headerFlag
 }
 
 func newFlagsCounterText() *widget.Text {
@@ -195,7 +202,7 @@ func RenderHeader() *widget.Container  {
 
 
 	// Flag tracker
-	FlagRowContainer.AddChild(HeaderFlagGraphic)
+	FlagRowContainer.AddChild(HeaderFlagText)
 	FlagRowContainer.AddChild(FlagsCounterText)
 	HeaderContainer.AddChild(FlagRowContainer)
 
