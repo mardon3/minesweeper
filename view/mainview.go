@@ -26,8 +26,10 @@ func NewRootContainer() *widget.Container {
 		)),
 	)
 
-	rootContainer.AddChild(RenderHeader())
-	rootContainer.AddChild(RenderBoard())
+	RenderHeader()
+	rootContainer.AddChild(HeaderContainer)
+	RenderBoard()
+	rootContainer.AddChild(BoardContainer)
 
 	return rootContainer
 }

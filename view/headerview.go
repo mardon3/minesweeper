@@ -196,7 +196,7 @@ func newFlagsCounterText() *widget.Text {
 	return flagsCounterText
 }
 
-func RenderHeader() *widget.Container  {
+func RenderHeader() {
 	// Difficulty Button
 	HeaderContainer.AddChild(DifficultyButton)
 
@@ -210,8 +210,6 @@ func RenderHeader() *widget.Container  {
 	ResetButtonStackContainer.AddChild(ResetButton)
 	ResetButtonStackContainer.AddChild(ResetEmoteGraphic)
 	HeaderContainer.AddChild(ResetButtonStackContainer)
-
-	return HeaderContainer
 }
 
 func loadButtonImage() (*widget.ButtonImage, error) {
