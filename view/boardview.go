@@ -1,6 +1,8 @@
 package view
 
 import (
+	"fmt"
+	"image/color"
 	"musmanov/minesweeper/controller"
 	"musmanov/minesweeper/model"
 
@@ -8,13 +10,18 @@ import (
 	"github.com/ebitenui/ebitenui/widget"
 )
 
+
 var (
-	BoardContainer *widget.Container = newBoardContainer();
+	BoardContainer *widget.Container
+	BoardCells [][]*widget.Button
+	// Screen dimensions
+	screenWidth int
+	screenHeight int
 )
 
 func newBoardContainer() *widget.Container {
-	screenWidth := controller.GetBoardWidth()
-	screenHeight := controller.GetBoardHeight()
+	screenWidth = controller.GetBoardWidth()
+	screenHeight = controller.GetBoardHeight()
 
 	columnStretchSlice := make([]bool, screenWidth)
 	for i := range columnStretchSlice {
@@ -28,15 +35,15 @@ func newBoardContainer() *widget.Container {
 
 	boardContainer := widget.NewContainer(
 		// the container will use assigned background color
-		widget.ContainerOpts.BackgroundImage(image.NewNineSliceColor(model.BoardBackgroundColor)),
+		widget.ContainerOpts.BackgroundImage(image.NewNineSliceColor(BoardBackgroundColor)),
 		// container will generate as many columns as the screen width requires
 		widget.ContainerOpts.Layout(widget.NewGridLayout(
 			//Define number of columns in the grid
 			widget.GridLayoutOpts.Columns(screenWidth),
 			//Define how much padding to inset the child content
-			widget.GridLayoutOpts.Padding(widget.NewInsetsSimple(4)),
+			widget.GridLayoutOpts.Padding(widget.NewInsetsSimple(2)),
 			//Define how far apart the rows and columns should be
-			widget.GridLayoutOpts.Spacing(0, 0),
+			widget.GridLayoutOpts.Spacing(2, 2),
 			//Define how to stretch the rows and columns. Note it is required to
 			//specify the Stretch for each row and column.
 			widget.GridLayoutOpts.Stretch(columnStretchSlice, rowStretchSlice),
@@ -46,6 +53,82 @@ func newBoardContainer() *widget.Container {
 	return boardContainer
 }
 
+func newBoardCellButton(r, c int) *widget.Button {
+	cellImage, _ := LoadCellImage(r, c)
+
+	flagFace, _ := loadAssetFont(fontRobotoBoldPath, 16)
+
+	boardCellButton := widget.NewButton(
+		widget.ButtonOpts.WidgetOpts(
+			widget.WidgetOpts.LayoutData(widget.GridLayoutData{
+				HorizontalPosition: widget.GridLayoutPositionEnd,
+				VerticalPosition: widget.GridLayoutPositionStart,
+			}),
+		),
+
+		widget.ButtonOpts.Image(cellImage),
+
+		widget.ButtonOpts.Text(fmt.Sprintf("%d, %d", r, c), flagFace, &widget.ButtonTextColor{
+			Idle: color.NRGBA{255, 0, 0, 255},
+		}),
+
+		widget.ButtonOpts.TextPadding(widget.Insets{
+			Left:   2,
+			Right:  2,
+			Top:    2,
+			Bottom: 2,
+		}),
+
+		// handler for when cell is clicked
+		widget.ButtonOpts.ClickedHandler(func(args *widget.ButtonClickedEventArgs) {
+			if !controller.IsLost() && !controller.IsFlagged(r, c) {
+				controller.LeftClickCell(r, c)
+			}
+		}),
+	)
+ 
+	return boardCellButton
+}
+
 func RenderBoard() *widget.Container {	
+	BoardContainer = newBoardContainer()
+
+	for r := 0; r < screenHeight; r++ {
+		BoardCells = append(BoardCells, make([]*widget.Button, screenWidth))
+		for c := 0; c < screenWidth; c++ {
+			BoardCells[r][c] = newBoardCellButton(r, c)
+			BoardContainer.AddChild(BoardCells[r][c])
+		}
+	}
+	
+
 	return BoardContainer
+}
+
+func LoadCellImage(r, c int) (*widget.ButtonImage, error) {
+	var (
+		idle     *image.NineSlice
+		hover    *image.NineSlice
+		pressed  *image.NineSlice
+	)
+	if controller.IsRevealed(r, c) && controller.GetCellType(r, c) == model.MineCell {
+		idle = image.NewNineSliceColor(color.NRGBA{255, 0, 0, 255})
+		hover = image.NewNineSliceColor(color.NRGBA{255, 0, 0, 255})
+		pressed = image.NewNineSliceColor(color.NRGBA{255, 0, 0, 255})
+	} else if !controller.IsRevealed(r, c) {
+		idle = image.NewNineSliceColor(controller.GetColor(r, c))
+		hover = image.NewNineSliceColor(color.NRGBA{130, 210, 255, 255})
+		pressed = image.NewNineSliceColor(color.NRGBA{130, 210, 255, 255})
+		println("drawing non-reveal cell", r, c)
+	} else {
+		idle = image.NewNineSliceColor(controller.GetColor(r, c))
+		hover = image.NewNineSliceColor(controller.GetColor(r, c))
+		pressed = image.NewNineSliceColor(controller.GetColor(r, c))
+	}	
+
+	return &widget.ButtonImage{
+		Idle:    idle,
+		Hover:   hover,
+		Pressed: pressed,
+	}, nil
 }
