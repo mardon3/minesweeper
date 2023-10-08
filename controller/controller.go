@@ -54,6 +54,10 @@ func GetDifficultyString() string {
 	return model.GetDifficultyString()
 }
 
+func GetDifficulty() model.Difficulty {
+	return model.GetDifficulty()
+}
+
 func IsLost() bool {
 	return model.IsLost()
 }

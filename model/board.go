@@ -115,6 +115,10 @@ func GetDifficultyString() string {
 	}
 }
 
+func GetDifficulty() Difficulty {
+	return currDifficulty
+}
+
 func GetMineCount() int {
 	return minesCount
 }
