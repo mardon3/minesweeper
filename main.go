@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"musmanov/minesweeper/controller"
+	"musmanov/minesweeper/model"
 	"musmanov/minesweeper/view"
 
 	"github.com/ebitenui/ebitenui"
@@ -16,7 +17,7 @@ type Game struct {
 
 func main() {
 	game := Game{
-		ui: view.NewUI(),
+		ui: view.NewUI(model.Beginner),
 	}
 
 	// run Ebiten main loop
