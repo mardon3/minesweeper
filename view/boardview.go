@@ -25,7 +25,7 @@ func newBoardContainer() *widget.Container {
 
 	columnStretchSlice := make([]bool, screenWidth)
 	for i := range columnStretchSlice {
-		columnStretchSlice[i] = true
+		columnStretchSlice[i] = true			
 	}
 
 	rowStretchSlice := make([]bool, screenHeight)
@@ -61,8 +61,10 @@ func newBoardCellButton(r, c int) *widget.Button {
 	boardCellButton := widget.NewButton(
 		widget.ButtonOpts.WidgetOpts(
 			widget.WidgetOpts.LayoutData(widget.GridLayoutData{
-				HorizontalPosition: widget.GridLayoutPositionEnd,
+				HorizontalPosition: widget.GridLayoutPositionCenter,
 				VerticalPosition: widget.GridLayoutPositionStart,
+				MaxWidth: controller.GetDifficulty().CellSize,
+				MaxHeight: controller.GetDifficulty().CellSize,
 			}),
 		),
 
@@ -70,13 +72,6 @@ func newBoardCellButton(r, c int) *widget.Button {
 
 		widget.ButtonOpts.Text(fmt.Sprintf("%d, %d", r, c), flagFace, &widget.ButtonTextColor{
 			Idle: color.NRGBA{255, 0, 0, 255},
-		}),
-
-		widget.ButtonOpts.TextPadding(widget.Insets{
-			Left:   2,
-			Right:  2,
-			Top:    2,
-			Bottom: 2,
 		}),
 
 		// handler for when cell is clicked
@@ -119,7 +114,6 @@ func LoadCellImage(r, c int) (*widget.ButtonImage, error) {
 		idle = image.NewNineSliceColor(controller.GetColor(r, c))
 		hover = image.NewNineSliceColor(color.NRGBA{130, 210, 255, 255})
 		pressed = image.NewNineSliceColor(color.NRGBA{130, 210, 255, 255})
-		println("drawing non-reveal cell", r, c)
 	} else {
 		idle = image.NewNineSliceColor(controller.GetColor(r, c))
 		hover = image.NewNineSliceColor(controller.GetColor(r, c))
