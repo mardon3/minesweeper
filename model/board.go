@@ -242,10 +242,8 @@ func SafeStart(row, col int) {
 			}
 		}	
 	}
-}
 
-func SetFirstClick(value bool) {
-	firstClick = value
+	firstClick = false
 }
 
 func swapCells(row1, col1, row2, col2 int) {
