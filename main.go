@@ -47,8 +47,10 @@ func (g *Game) Update() error {
 	for r := 0; r < controller.GetBoardHeight(); r++ {
 		for c := 0; c < controller.GetBoardWidth(); c++ {
 			view.BoardCells[r][c].Image, _ = view.LoadCellImage(r, c)
-			if controller.IsRevealed(r, c) {
-				view.BoardCells[r][c].Text().Label = strconv.Itoa(controller.GetMineCount())
+			if controller.IsRevealed(r, c) && controller.GetCellValue(r, c) == 0 {
+				view.BoardCells[r][c].Text().Label = ""
+			} else if controller.IsRevealed(r, c) {
+				view.BoardCells[r][c].Text().Label = strconv.Itoa(controller.GetCellValue(r, c))
 			}
 		}
 	}
