@@ -157,6 +157,8 @@ func RevealCell(row, col int) {
 	// When an entire region is being cleared, and there's an incorrectly flagged cell
 	if IsFlagged(row, col) {
 		flagsLeft++
+	} else if board[row][col].isRevealed {
+		return
 	}
 
 	board[row][col].color = color.RGBA{150, 200, 255, 255}
@@ -169,6 +171,8 @@ func RevealEmptyCell(row, col int) {
 	// When an entire region is being cleared, and there's an incorrectly flagged cell
 	if IsFlagged(row, col) {
 		flagsLeft++
+	} else if board[row][col].isRevealed {
+		return
 	}
 
 	board[row][col].color = color.RGBA{150, 200, 255, 255}
