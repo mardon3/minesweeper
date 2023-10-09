@@ -236,12 +236,16 @@ func SafeStart(row, col int) {
 				if GetCellType(r, c) != MineCell {
 					// Swap the cell with the given cell as param and adjust adjacent cells accordingly
 					swapCells(row, col, r, c)
+					firstClick = false
+					return
 				}
 			}
 		}	
 	}
+}
 
-	firstClick = false
+func SetFirstClick(value bool) {
+	firstClick = value
 }
 
 func swapCells(row1, col1, row2, col2 int) {
