@@ -1,9 +1,11 @@
 package model
 
 import (
+	"fmt"
 	"image/color"
 	"math/rand"
 	"strconv"
+	"time"
 )
 
 type Cell struct {
@@ -20,6 +22,9 @@ var (
 	unRevealedCells int
 	currDifficulty Difficulty = Beginner
 	firstClick bool
+	// Timer
+	startTime time.Time
+	elapsedTime time.Duration
 )
 
 
@@ -243,6 +248,7 @@ func SafeStart(row, col int) {
 		}	
 	}
 
+	startTime = time.Now()
 	firstClick = false
 }
 
@@ -283,4 +289,23 @@ func GetColor(row, col int) color.Color {
 
 func GetFlagsString() string {
 	return strconv.Itoa(flagsLeft)
+}
+
+func GetTimerString() string {
+    if startTime.IsZero() || firstClick {
+        return "000"
+    } else if !IsSolved() && !IsLost() {
+        elapsedTime = time.Since(startTime)
+    }
+
+    // Round the elapsed time to the nearest second and convert to int for formatiting and conditional
+    seconds := int(elapsedTime.Round(time.Second).Seconds())
+
+    // Stop displaying time over 999 seconds
+    if seconds > 999 {
+        return "999"
+    }
+
+    // Format the time as a zero-padded string with 3 digits
+    return fmt.Sprintf("%03d", seconds)
 }
