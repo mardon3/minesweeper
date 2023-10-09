@@ -133,6 +133,7 @@ func newResetButton() *widget.Button {
 			for r := 0; r < controller.GetBoardHeight(); r++ {
 				for c := 0; c < controller.GetBoardWidth(); c++ {
 					BoardCells[r][c].Text().Label = ""
+					BoardCells[r][c].TextColor.Idle = color.NRGBA{255, 0, 0, 255}
 				}
 			}
 		}),
