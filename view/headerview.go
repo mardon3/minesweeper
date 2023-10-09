@@ -19,6 +19,7 @@ const (
 	emoteHYPERSPath      = "assets/emotes/HYPERS.png"
 	emotePepeHandsPath   = "assets/emotes/PepeHands.png"
 	emotePepoThinkPath   = "assets/emotes/PepoThink.png"
+	timerGraphicPath     = "assets/emotes/Timer.png"
 )
 
 var (
@@ -27,13 +28,18 @@ var (
 	ResetButtonStackContainer *widget.Container = newResetButtonStackContainer()
 	ResetButton *widget.Button = newResetButton()
 	ResetEmoteGraphic *widget.Graphic = newResetGraphic()
+	FlagRowContainer *widget.Container = newFlagRowContainer()
 	FlagsCounterText *widget.Text = newFlagsCounterText()
 	HeaderFlagText *widget.Text = newHeaderFlag()
-	FlagRowContainer *widget.Container = newFlagRowContainer()
+	TimerRowContainer *widget.Container = newTimerRowContainer()
+	TimerGraphic *widget.Graphic = newTimerGraphic()
+	TimerText *widget.Text = newTimerText()
 	// Reset button emote graphics
 	HypersIcon, _ = loadButtonIcon(emoteHYPERSPath)
 	PepeHandsIcon, _ = loadButtonIcon(emotePepeHandsPath)
 	PepoThinkIcon, _ = loadButtonIcon(emotePepoThinkPath)
+	// Timer graphic
+	TimerIcon, _ = loadButtonIcon(timerGraphicPath)
 )
 
 func newHeaderContainer() *widget.Container {
@@ -158,7 +164,6 @@ func newFlagRowContainer() *widget.Container {
 			widget.RowLayoutOpts.Padding(widget.NewInsetsSimple(2)),
 			//Set how far apart to space the children
 			widget.RowLayoutOpts.Spacing(2),
-
 		)),
 		widget.ContainerOpts.WidgetOpts(
 			widget.WidgetOpts.LayoutData(widget.RowLayoutData{
@@ -202,10 +207,52 @@ func newFlagsCounterText() *widget.Text {
 	return flagsCounterText
 }
 
+func newTimerRowContainer() *widget.Container {
+	timerRowContainer := widget.NewContainer(
+		widget.ContainerOpts.BackgroundImage(image.NewNineSliceColor(HeaderBackgroundColor)),
+		widget.ContainerOpts.Layout(widget.NewRowLayout(
+			//Which direction to layout children
+			widget.RowLayoutOpts.Direction(widget.DirectionHorizontal),
+			//Set how much padding before displaying content
+			widget.RowLayoutOpts.Padding(widget.NewInsetsSimple(2)),
+			//Set how far apart to space the children
+			widget.RowLayoutOpts.Spacing(2),
+		)),
+		widget.ContainerOpts.WidgetOpts(
+			widget.WidgetOpts.LayoutData(widget.RowLayoutData{
+				Position: widget.RowLayoutPositionCenter,
+			}),
+		),
+	)
+
+	return timerRowContainer
+} 
+
+func newTimerGraphic() *widget.Graphic {
+	timerGraphic := widget.NewGraphic(widget.GraphicOpts.Image(TimerIcon))
+
+	return timerGraphic
+}
+
+func newTimerText() *widget.Text { 
+	robotoBoldFace, _ := loadAssetFont(fontRobotoBoldPath, 24)
+
+	flagsCounterText := widget.NewText(
+		widget.TextOpts.Text("000", robotoBoldFace, color.White),
+		widget.TextOpts.Position(widget.TextPositionCenter, widget.TextPositionCenter),
+		widget.TextOpts.WidgetOpts(
+			widget.WidgetOpts.LayoutData(widget.RowLayoutData{
+				Position: widget.RowLayoutPositionCenter,
+			}),
+		),
+	)
+
+	return flagsCounterText
+}
+
 func RenderHeader() {
 	// Difficulty Button
 	HeaderContainer.AddChild(DifficultyButton)
-
 
 	// Flag tracker
 	FlagRowContainer.AddChild(HeaderFlagText)
@@ -216,6 +263,11 @@ func RenderHeader() {
 	ResetButtonStackContainer.AddChild(ResetButton)
 	ResetButtonStackContainer.AddChild(ResetEmoteGraphic)
 	HeaderContainer.AddChild(ResetButtonStackContainer)
+
+	// Timer
+	TimerRowContainer.AddChild(TimerGraphic)
+	TimerRowContainer.AddChild(TimerText)
+	HeaderContainer.AddChild(TimerRowContainer)
 }
 
 func loadButtonImage() (*widget.ButtonImage, error) {
