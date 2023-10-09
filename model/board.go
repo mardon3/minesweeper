@@ -133,6 +133,10 @@ func GetCellType(row, col int) CellType {
 	return ValueCell
 }
 
+func GetCellValue(row, col int) int {
+	return board[row][col].value
+}
+
 func IsRevealed(row, col int) bool {
 	return board[row][col].isRevealed
 }

@@ -94,3 +94,7 @@ func IsFlagged(row, col int) bool {
 func GetCellType(row, col int) model.CellType {
 	return model.GetCellType(row, col)
 }
+
+func GetCellValue(row, col int) int {
+	return model.GetCellValue(row, col)
+}
