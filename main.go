@@ -75,6 +75,7 @@ func (g *Game) Update() error {
 		}
 	}
 
+	view.TimerText.Label = controller.GetTimerString()
 	view.FlagsCounterText.Label = controller.GetFlagsString()
 
 	g.ui.Update()
