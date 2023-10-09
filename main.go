@@ -5,6 +5,7 @@ import (
 	"musmanov/minesweeper/controller"
 	"musmanov/minesweeper/model"
 	"musmanov/minesweeper/view"
+	"strconv"
 
 	"github.com/ebitenui/ebitenui"
 	"github.com/hajimehoshi/ebiten/v2"
@@ -41,6 +42,15 @@ func (g *Game) Update() error {
 		view.ResetEmoteGraphic.Image = view.PepeHandsIcon
 	} else {
 		view.ResetEmoteGraphic.Image = view.PepoThinkIcon
+	}
+	
+	for r := 0; r < controller.GetBoardHeight(); r++ {
+		for c := 0; c < controller.GetBoardWidth(); c++ {
+			view.BoardCells[r][c].Image, _ = view.LoadCellImage(r, c)
+			if controller.IsRevealed(r, c) {
+				view.BoardCells[r][c].Text().Label = strconv.Itoa(controller.GetMineCount())
+			}
+		}
 	}
 
 	view.FlagsCounterText.Label = controller.GetFlagsString()
