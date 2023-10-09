@@ -98,3 +98,7 @@ func GetCellType(row, col int) model.CellType {
 func GetCellValue(row, col int) int {
 	return model.GetCellValue(row, col)
 }
+
+func GetTimerString() string {
+	return model.GetTimerString()
+}
