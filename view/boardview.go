@@ -105,10 +105,15 @@ func LoadCellImage(r, c int) (*widget.ButtonImage, error) {
 		hover    *image.NineSlice
 		pressed  *image.NineSlice
 	)
+	
 	if controller.IsRevealed(r, c) && controller.GetCellType(r, c) == model.MineCell {
 		idle = image.NewNineSliceColor(color.NRGBA{255, 0, 0, 255})
 		hover = image.NewNineSliceColor(color.NRGBA{255, 0, 0, 255})
 		pressed = image.NewNineSliceColor(color.NRGBA{255, 0, 0, 255})
+	} else if !controller.IsRevealed(r, c) && (controller.IsSolved() || controller.IsLost()) {
+		idle = image.NewNineSliceColor(controller.GetColor(r, c))
+		hover = image.NewNineSliceColor(controller.GetColor(r, c))
+		pressed = image.NewNineSliceColor(controller.GetColor(r, c))
 	} else if !controller.IsRevealed(r, c) {
 		idle = image.NewNineSliceColor(controller.GetColor(r, c))
 		hover = image.NewNineSliceColor(color.NRGBA{130, 210, 255, 255})
