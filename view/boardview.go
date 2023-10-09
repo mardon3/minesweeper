@@ -75,7 +75,7 @@ func newBoardCellButton(r, c int) *widget.Button {
 
 		// handler for when cell is clicked
 		widget.ButtonOpts.ClickedHandler(func(args *widget.ButtonClickedEventArgs) {
-			if !controller.IsLost() && !controller.IsFlagged(r, c) {
+			if !controller.IsLost() && !controller.IsFlagged(r, c) && !controller.IsSolved() {
 				controller.LeftClickCell(r, c)
 			}
 		}),
