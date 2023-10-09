@@ -1,6 +1,7 @@
 package main
 
 import (
+	"image/color"
 	"log"
 	"musmanov/minesweeper/controller"
 	"musmanov/minesweeper/model"
@@ -47,10 +48,29 @@ func (g *Game) Update() error {
 	for r := 0; r < controller.GetBoardHeight(); r++ {
 		for c := 0; c < controller.GetBoardWidth(); c++ {
 			view.BoardCells[r][c].Image, _ = view.LoadCellImage(r, c)
-			if controller.IsRevealed(r, c) && controller.GetCellValue(r, c) == 0 {
-				view.BoardCells[r][c].Text().Label = ""
-			} else if controller.IsRevealed(r, c) {
-				view.BoardCells[r][c].Text().Label = strconv.Itoa(controller.GetCellValue(r, c))
+			if controller.IsRevealed(r, c) {
+				cellValue := controller.GetCellValue(r, c)
+				switch cellValue {
+					case 0:
+						view.BoardCells[r][c].TextColor.Idle = color.White
+					case 1:
+						view.BoardCells[r][c].TextColor.Idle = color.NRGBA{0, 0, 255, 255}
+					case 2:
+						view.BoardCells[r][c].TextColor.Idle = color.NRGBA{0, 128, 0, 255}
+					case 3:
+						view.BoardCells[r][c].TextColor.Idle = color.NRGBA{255, 0, 0, 255}
+					case 4:
+						view.BoardCells[r][c].TextColor.Idle = color.NRGBA{0, 0, 128, 255}
+					case 5:
+						view.BoardCells[r][c].TextColor.Idle = color.NRGBA{128, 0, 0, 255}
+					case 6:
+						view.BoardCells[r][c].TextColor.Idle = color.NRGBA{0, 128, 128, 255}
+					case 7:
+						view.BoardCells[r][c].TextColor.Idle = color.NRGBA{0, 0, 0, 255}
+					case 8:
+						view.BoardCells[r][c].TextColor.Idle = color.NRGBA{128, 128, 128, 255}
+				}
+				view.BoardCells[r][c].Text().Label = strconv.Itoa(cellValue)
 			}
 		}
 	}
