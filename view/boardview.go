@@ -1,7 +1,6 @@
 package view
 
 import (
-	"fmt"
 	"image/color"
 	"musmanov/minesweeper/controller"
 	"musmanov/minesweeper/model"
@@ -70,7 +69,7 @@ func newBoardCellButton(r, c int) *widget.Button {
 
 		widget.ButtonOpts.Image(cellImage),
 
-		widget.ButtonOpts.Text(fmt.Sprintf("%d, %d", r, c), flagFace, &widget.ButtonTextColor{
+		widget.ButtonOpts.Text("", flagFace, &widget.ButtonTextColor{
 			Idle: color.NRGBA{255, 0, 0, 255},
 		}),
 
@@ -115,9 +114,9 @@ func LoadCellImage(r, c int) (*widget.ButtonImage, error) {
 		hover = image.NewNineSliceColor(color.NRGBA{130, 210, 255, 255})
 		pressed = image.NewNineSliceColor(color.NRGBA{130, 210, 255, 255})
 	} else {
-		idle = image.NewNineSliceColor(controller.GetColor(r, c))
-		hover = image.NewNineSliceColor(controller.GetColor(r, c))
-		pressed = image.NewNineSliceColor(controller.GetColor(r, c))
+		idle = image.NewNineSliceColor(color.White)
+		hover = image.NewNineSliceColor(color.White)
+		pressed = image.NewNineSliceColor(color.White)
 	}	
 
 	return &widget.ButtonImage{
