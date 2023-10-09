@@ -7,6 +7,7 @@ import (
 
 // Reveal a cell
 func LeftClickCell(row, col int) {
+	// If cell is flagged or revealed, do nothing")
 	if model.IsFlagged(row, col) || model.IsRevealed(row, col) {
 		return
 	}
