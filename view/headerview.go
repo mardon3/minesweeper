@@ -130,6 +130,11 @@ func newResetButton() *widget.Button {
 		// add a handler that reacts to clicking the button
 		widget.ButtonOpts.ClickedHandler(func(args *widget.ButtonClickedEventArgs) {
 			controller.NewBoard()
+			for r := 0; r < controller.GetBoardHeight(); r++ {
+				for c := 0; c < controller.GetBoardWidth(); c++ {
+					BoardCells[r][c].Text().Label = ""
+				}
+			}
 		}),
 	)
 
