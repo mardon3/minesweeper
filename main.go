@@ -78,6 +78,16 @@ func (g *Game) Update() error {
 	view.TimerText.Label = controller.GetTimerString()
 	view.FlagsCounterText.Label = controller.GetFlagsString()
 
+	if ebiten.IsKeyPressed(ebiten.KeySpace) {
+		controller.NewBoard()
+			for r := 0; r < controller.GetBoardHeight(); r++ {
+				for c := 0; c < controller.GetBoardWidth(); c++ {
+					view.BoardCells[r][c].Text().Label = ""
+					view.BoardCells[r][c].TextColor.Idle = color.NRGBA{255, 0, 0, 255}
+				}
+			}
+	}
+
 	g.ui.Update()
 	return nil
 }
