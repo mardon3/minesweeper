@@ -7,6 +7,7 @@ import (
 
 	"github.com/ebitenui/ebitenui/image"
 	"github.com/ebitenui/ebitenui/widget"
+	"github.com/hajimehoshi/ebiten/v2"
 )
 
 
@@ -16,6 +17,10 @@ var (
 	// Screen dimensions
 	screenWidth int
 	screenHeight int
+	// Revealed font
+	RobotoBoldFace, _  = loadAssetFont(fontRobotoBoldPath, 16)
+	// Not revealed font
+	FlagFace, _ = loadAssetFont(fontFlagPath, 30)
 )
 
 func newBoardContainer() *widget.Container {
@@ -55,8 +60,6 @@ func newBoardContainer() *widget.Container {
 func newBoardCellButton(r, c int) *widget.Button {
 	cellImage, _ := LoadCellImage(r, c)
 
-	flagFace, _ := loadAssetFont(fontRobotoBoldPath, 16)
-
 	boardCellButton := widget.NewButton(
 		widget.ButtonOpts.WidgetOpts(
 			widget.WidgetOpts.LayoutData(widget.GridLayoutData{
@@ -65,11 +68,17 @@ func newBoardCellButton(r, c int) *widget.Button {
 				MaxWidth: controller.GetDifficulty().CellSize,
 				MaxHeight: controller.GetDifficulty().CellSize,
 			}),
+
+			widget.WidgetOpts.MouseButtonPressedHandler(func(args *widget.WidgetMouseButtonPressedEventArgs) {
+				if args.Button == ebiten.MouseButtonRight && !controller.IsLost() && !controller.IsSolved() {
+					controller.RightClickCell(r, c)	
+				}
+			}),
 		),
 
 		widget.ButtonOpts.Image(cellImage),
 
-		widget.ButtonOpts.Text("", flagFace, &widget.ButtonTextColor{
+		widget.ButtonOpts.Text("", FlagFace, &widget.ButtonTextColor{
 			Idle: color.NRGBA{255, 0, 0, 255},
 		}),
 
@@ -80,7 +89,7 @@ func newBoardCellButton(r, c int) *widget.Button {
 			}
 		}),
 	)
- 
+
 	return boardCellButton
 }
 
