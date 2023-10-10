@@ -54,23 +54,35 @@ func (g *Game) Update() error {
 					case 0:
 						view.BoardCells[r][c].TextColor.Idle = color.White
 					case 1:
+						view.BoardCells[r][c].Text().Face = view.RobotoBoldFace
 						view.BoardCells[r][c].TextColor.Idle = color.NRGBA{0, 0, 255, 255}
 					case 2:
+						view.BoardCells[r][c].Text().Face = view.RobotoBoldFace
 						view.BoardCells[r][c].TextColor.Idle = color.NRGBA{0, 128, 0, 255}
 					case 3:
+						view.BoardCells[r][c].Text().Face = view.RobotoBoldFace
 						view.BoardCells[r][c].TextColor.Idle = color.NRGBA{255, 0, 0, 255}
 					case 4:
+						view.BoardCells[r][c].Text().Face = view.RobotoBoldFace
 						view.BoardCells[r][c].TextColor.Idle = color.NRGBA{0, 0, 128, 255}
 					case 5:
+						view.BoardCells[r][c].Text().Face = view.RobotoBoldFace
 						view.BoardCells[r][c].TextColor.Idle = color.NRGBA{128, 0, 0, 255}
 					case 6:
+						view.BoardCells[r][c].Text().Face = view.RobotoBoldFace
 						view.BoardCells[r][c].TextColor.Idle = color.NRGBA{0, 128, 128, 255}
 					case 7:
+						view.BoardCells[r][c].Text().Face = view.RobotoBoldFace
 						view.BoardCells[r][c].TextColor.Idle = color.NRGBA{0, 0, 0, 255}
 					case 8:
+						view.BoardCells[r][c].Text().Face = view.RobotoBoldFace
 						view.BoardCells[r][c].TextColor.Idle = color.NRGBA{128, 128, 128, 255}
 				}
 				view.BoardCells[r][c].Text().Label = strconv.Itoa(cellValue)
+			} else if controller.IsFlagged(r, c) {
+				view.BoardCells[r][c].Text().Label = "."
+			} else if !controller.IsFlagged(r, c) {
+				view.BoardCells[r][c].Text().Label = ""
 			}
 		}
 	}
@@ -80,12 +92,12 @@ func (g *Game) Update() error {
 
 	if ebiten.IsKeyPressed(ebiten.KeySpace) {
 		controller.NewBoard()
-			for r := 0; r < controller.GetBoardHeight(); r++ {
-				for c := 0; c < controller.GetBoardWidth(); c++ {
-					view.BoardCells[r][c].Text().Label = ""
-					view.BoardCells[r][c].TextColor.Idle = color.NRGBA{255, 0, 0, 255}
-				}
+		for r := 0; r < controller.GetBoardHeight(); r++ {
+			for c := 0; c < controller.GetBoardWidth(); c++ {
+				view.BoardCells[r][c].Text().Label = ""
+				view.BoardCells[r][c].TextColor.Idle = color.NRGBA{255, 0, 0, 255}
 			}
+		}
 	}
 
 	g.ui.Update()
