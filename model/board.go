@@ -151,7 +151,7 @@ func IsFlagged(row, col int) bool {
 }
 
 func FlagCell(row, col int) {
-	if flagsLeft == 0 && !IsFlagged(row, col) {
+	if (flagsLeft == 0 && !IsFlagged(row, col)) || IsRevealed(row, col) {
 		return
 	} else if IsFlagged(row, col) {
 		flagsLeft++
