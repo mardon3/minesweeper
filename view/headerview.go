@@ -140,6 +140,7 @@ func newResetButton() *widget.Button {
 				for c := 0; c < controller.GetBoardWidth(); c++ {
 					BoardCells[r][c].Text().Label = ""
 					BoardCells[r][c].TextColor.Idle = color.NRGBA{255, 0, 0, 255}
+					BoardCells[r][c].Text().Face = FlagFace
 				}
 			}
 		}),
@@ -176,10 +177,10 @@ func newFlagRowContainer() *widget.Container {
 }
 
 func newHeaderFlag() *widget.Text {
-	flagFont, _ := loadAssetFont(fontFlagPath, 50)
+	flagFace, _ := loadAssetFont(fontFlagPath, 50)
 
 	headerFlag := widget.NewText(
-		widget.TextOpts.Text(";", flagFont, color.NRGBA{255, 0, 0, 255}),
+		widget.TextOpts.Text(";", flagFace, color.NRGBA{255, 0, 0, 255}),
 		widget.TextOpts.Position(widget.TextPositionCenter, widget.TextPositionCenter),
 		widget.TextOpts.WidgetOpts(
 			widget.WidgetOpts.LayoutData(widget.RowLayoutData{
