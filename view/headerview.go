@@ -3,7 +3,6 @@ package view
 import (
 	"image/color"
 	"musmanov/minesweeper/controller"
-	"musmanov/minesweeper/model"
 
 	"github.com/ebitenui/ebitenui/image"
 	"github.com/ebitenui/ebitenui/widget"
@@ -41,6 +40,8 @@ var (
 	PepoThinkIcon, _ = loadButtonIcon(emotePepoThinkPath)
 	// Timer graphic
 	TimerIcon, _ = loadButtonIcon(timerGraphicPath)
+	// Tracks if difficulty button was clicked
+	DifficultyClicked bool = false
 )
 
 func newHeaderContainer() *widget.Container {
@@ -98,21 +99,7 @@ func newDifficultyButton() *widget.Button {
 
 		// add a handler that reacts to clicking the button
 		widget.ButtonOpts.ClickedHandler(func(args *widget.ButtonClickedEventArgs) {
-			switch controller.GetDifficultyString() {
-			case "Beginner":
-				NewUI(model.Intermediate)
-			case "Intermediate":
-				NewUI(model.Expert)
-			case "Expert":
-				NewUI(model.Beginner)
-			}
-			for r := 0; r < controller.GetBoardHeight(); r++ {
-				for c := 0; c < controller.GetBoardWidth(); c++ {
-					BoardCells[r][c].Text().Label = ""
-					BoardCells[r][c].TextColor.Idle = color.NRGBA{255, 0, 0, 255}
-					BoardCells[r][c].Text().Face = FlagFace
-				}
-			}
+			DifficultyClicked = true
 			args.Button.Text().Label = "Difficulty: " + controller.GetDifficultyString()
 		}),
 	)
