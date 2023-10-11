@@ -121,14 +121,6 @@ func (g *Game) Update() error {
 		case "Expert":
 			g.ui = view.NewUI(model.Beginner)
 		}
-		controller.NewBoard()
-		for r := 0; r < controller.GetBoardHeight(); r++ {
-			for c := 0; c < controller.GetBoardWidth(); c++ {
-				view.BoardCells[r][c].Text().Label = ""
-				view.BoardCells[r][c].TextColor.Idle = color.NRGBA{255, 0, 0, 255}
-				view.BoardCells[r][c].Text().Face = view.FlagFace
-			}
-		}
 
 		view.DifficultyClicked = false
 	}
