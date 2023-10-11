@@ -51,8 +51,11 @@ func (g *Game) Update() error {
 			if controller.IsRevealed(r, c) {
 				cellValue := controller.GetCellValue(r, c)
 				switch cellValue {
+					case -1:
+						view.BoardCells[r][c].Text().Face = view.MineFace
+						view.BoardCells[r][c].TextColor.Idle = color.Black
 					case 0:
-						view.BoardCells[r][c].TextColor.Idle = color.White
+						view.BoardCells[r][c].TextColor.Idle = color.NRGBA{235, 235, 210, 255}
 					case 1:
 						view.BoardCells[r][c].Text().Face = view.RobotoBoldFace
 						view.BoardCells[r][c].TextColor.Idle = color.NRGBA{0, 0, 255, 255}
@@ -78,7 +81,15 @@ func (g *Game) Update() error {
 						view.BoardCells[r][c].Text().Face = view.RobotoBoldFace
 						view.BoardCells[r][c].TextColor.Idle = color.NRGBA{128, 128, 128, 255}
 				}
-				view.BoardCells[r][c].Text().Label = strconv.Itoa(cellValue)
+
+				// If not a mine cell, else:
+				if cellValue != -1 {
+					view.BoardCells[r][c].Text().Label = strconv.Itoa(cellValue)
+				} else { 
+					// "3" represents mine symbol in MineFace
+					view.BoardCells[r][c].Text().Label = "3"
+				}
+
 			} else if controller.IsFlagged(r, c) {
 				view.BoardCells[r][c].Text().Label = "."
 			} else if !controller.IsFlagged(r, c) {
@@ -90,6 +101,7 @@ func (g *Game) Update() error {
 	view.TimerText.Label = controller.GetTimerString()
 	view.FlagsCounterText.Label = controller.GetFlagsString()
 
+	// Spacebar to reset board
 	if ebiten.IsKeyPressed(ebiten.KeySpace) {
 		controller.NewBoard()
 		for r := 0; r < controller.GetBoardHeight(); r++ {
