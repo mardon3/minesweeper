@@ -4,7 +4,6 @@ import (
 	"image/color"
 	"log"
 	"musmanov/minesweeper/controller"
-	"musmanov/minesweeper/model"
 	"musmanov/minesweeper/view"
 	"strconv"
 
@@ -19,7 +18,7 @@ type Game struct {
 
 func main() {
 	game := Game{
-		ui: view.NewUI(model.Beginner),
+		ui: view.NewUI(),
 	}
 
 	// run Ebiten main loop
