@@ -48,7 +48,7 @@ func RenderRootContainer() *widget.Container {
 // Generates a new board
 func NewUI(boardDifficulty ...model.Difficulty) *ebitenui.UI {
 	controller.NewBoard(boardDifficulty...)
-	// To keep board square size, since header is set to 72 pixels height
+	// Set the window size according to board difficulty
 	ebiten.SetWindowSize(controller.GetDifficulty().ScreenWidth, controller.GetDifficulty().ScreenHeight)
 	ebiten.SetWindowTitle("Minesweeper")
 
