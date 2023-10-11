@@ -21,6 +21,8 @@ var (
 	RobotoBoldFace, _  = loadAssetFont(fontRobotoBoldPath, 16)
 	// Not revealed font
 	FlagFace, _ = loadAssetFont(fontFlagPath, 30)
+	// Mine font
+	MineFace, _ = loadAssetFont(fontMinePath, 30)
 )
 
 func newBoardContainer() *widget.Container {
@@ -128,9 +130,9 @@ func LoadCellImage(r, c int) (*widget.ButtonImage, error) {
 		hover = image.NewNineSliceColor(color.NRGBA{130, 210, 255, 255})
 		pressed = image.NewNineSliceColor(color.NRGBA{130, 210, 255, 255})
 	} else {
-		idle = image.NewNineSliceColor(color.White)
-		hover = image.NewNineSliceColor(color.White)
-		pressed = image.NewNineSliceColor(color.White)
+		idle = image.NewNineSliceColor(color.NRGBA{235, 235, 210, 255})
+		hover = image.NewNineSliceColor(color.NRGBA{235, 235, 210, 255})
+		pressed = image.NewNineSliceColor(color.NRGBA{235, 235, 210, 255})
 	}	
 
 	return &widget.ButtonImage{
