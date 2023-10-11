@@ -14,5 +14,5 @@ type Difficulty struct {
 var (
     Beginner     = Difficulty{Height: 9, Width: 9, Mines: 10, ScreenWidth: 560, ScreenHeight: 632, CellSize: 60}
     Intermediate = Difficulty{Height: 16, Width: 16, Mines: 40, ScreenWidth: 738, ScreenHeight: 810, CellSize: 44}
-    Expert       = Difficulty{Height: 16, Width: 30, Mines: 99, ScreenWidth: 738, ScreenHeight: 810, CellSize: 44}
+    Expert       = Difficulty{Height: 16, Width: 30, Mines: 99, ScreenWidth: 1382, ScreenHeight: 810, CellSize: 44}
 )
