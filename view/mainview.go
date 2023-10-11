@@ -11,7 +11,11 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
-func NewRootContainer() *widget.Container {
+var (
+	RootContainer *widget.Container
+)
+
+func newRootContainer() *widget.Container {
 	rootContainer := widget.NewContainer(
 		// the container will use a plain color as its background
 		widget.ContainerOpts.BackgroundImage(image.NewNineSliceColor(color.White)),
@@ -26,22 +30,31 @@ func NewRootContainer() *widget.Container {
 		)),
 	)
 
-	RenderHeader()
-	rootContainer.AddChild(HeaderContainer)
-	RenderBoard()
-	rootContainer.AddChild(BoardContainer)
-
 	return rootContainer
+}
+
+func RenderRootContainer() *widget.Container {
+	RootContainer = newRootContainer()
+
+	RenderHeader()
+	RootContainer.AddChild(HeaderContainer)
+
+	RenderBoard()
+	RootContainer.AddChild(BoardContainer)
+
+	return RootContainer
 }
 
 // Generates a new board
 func NewUI(boardDifficulty ...model.Difficulty) *ebitenui.UI {
 	controller.NewBoard(boardDifficulty...)
 	// To keep board square size, since header is set to 72 pixels height
-	ebiten.SetWindowSize(boardDifficulty[0].ScreenWidth, boardDifficulty[0].ScreenHeight)
+	ebiten.SetWindowSize(controller.GetDifficulty().ScreenWidth, controller.GetDifficulty().ScreenHeight)
 	ebiten.SetWindowTitle("Minesweeper")
+
+	RenderRootContainer()
 	ui := ebitenui.UI{
-		Container: NewRootContainer(),
+		Container: RootContainer,
 	}
 
 	return &ui
