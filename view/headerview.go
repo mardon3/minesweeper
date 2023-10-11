@@ -16,6 +16,7 @@ import (
 const (
 	fontRobotoBoldPath   = "assets/fonts/Roboto-Bold.ttf"
 	fontFlagPath 		 = "assets/fonts/Flags.ttf"
+	fontMinePath 		 = "assets/fonts/Mines.ttf"
 	emoteHYPERSPath      = "assets/emotes/HYPERS.png"
 	emotePepeHandsPath   = "assets/emotes/PepeHands.png"
 	emotePepoThinkPath   = "assets/emotes/PepoThink.png"
