@@ -24,17 +24,17 @@ const (
 )
 
 var (
-	HeaderContainer *widget.Container = newHeaderContainer()
-	DifficultyButton *widget.Button = newDifficultyButton()
-	ResetButtonStackContainer *widget.Container = newResetButtonStackContainer()
-	ResetButton *widget.Button = newResetButton()
-	ResetEmoteGraphic *widget.Graphic = newResetGraphic()
-	FlagRowContainer *widget.Container = newFlagRowContainer()
-	FlagsCounterText *widget.Text = newFlagsCounterText()
-	HeaderFlagText *widget.Text = newHeaderFlag()
-	TimerRowContainer *widget.Container = newTimerRowContainer()
-	TimerGraphic *widget.Graphic = newTimerGraphic()
-	TimerText *widget.Text = newTimerText()
+	HeaderContainer *widget.Container
+	DifficultyButton *widget.Button
+	ResetButtonStackContainer *widget.Container
+	ResetButton *widget.Button
+	ResetEmoteGraphic *widget.Graphic
+	FlagRowContainer *widget.Container
+	FlagsCounterText *widget.Text
+	HeaderFlagText *widget.Text
+	TimerRowContainer *widget.Container
+	TimerGraphic *widget.Graphic
+	TimerText *widget.Text
 	// Reset button emote graphics
 	HypersIcon, _ = loadButtonIcon(emoteHYPERSPath)
 	PepeHandsIcon, _ = loadButtonIcon(emotePepeHandsPath)
@@ -100,11 +100,18 @@ func newDifficultyButton() *widget.Button {
 		widget.ButtonOpts.ClickedHandler(func(args *widget.ButtonClickedEventArgs) {
 			switch controller.GetDifficultyString() {
 			case "Beginner":
-				controller.NewBoard(model.Intermediate)
+				NewUI(model.Intermediate)
 			case "Intermediate":
-				controller.NewBoard(model.Expert)
+				NewUI(model.Expert)
 			case "Expert":
-				controller.NewBoard(model.Beginner)
+				NewUI(model.Beginner)
+			}
+			for r := 0; r < controller.GetBoardHeight(); r++ {
+				for c := 0; c < controller.GetBoardWidth(); c++ {
+					BoardCells[r][c].Text().Label = ""
+					BoardCells[r][c].TextColor.Idle = color.NRGBA{255, 0, 0, 255}
+					BoardCells[r][c].Text().Face = FlagFace
+				}
 			}
 			args.Button.Text().Label = "Difficulty: " + controller.GetDifficultyString()
 		}),
@@ -253,6 +260,17 @@ func newTimerText() *widget.Text {
 }
 
 func RenderHeader() {
+	HeaderContainer  = newHeaderContainer()
+	DifficultyButton = newDifficultyButton()
+	ResetButtonStackContainer = newResetButtonStackContainer()
+	ResetButton = newResetButton()
+	ResetEmoteGraphic = newResetGraphic()
+	FlagRowContainer = newFlagRowContainer()
+	FlagsCounterText = newFlagsCounterText()
+	HeaderFlagText = newHeaderFlag()
+	TimerRowContainer = newTimerRowContainer()
+	TimerGraphic = newTimerGraphic()
+	TimerText = newTimerText()
 	// Difficulty Button
 	HeaderContainer.AddChild(DifficultyButton)
 
