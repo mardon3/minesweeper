@@ -62,13 +62,15 @@ func newBoardContainer() *widget.Container {
 func newBoardCellButton(r, c int) *widget.Button {
 	cellImage, _ := LoadCellImage(r, c)
 
+	cellSize := controller.GetDifficulty().CellSize
+
 	boardCellButton := widget.NewButton(
 		widget.ButtonOpts.WidgetOpts(
 			widget.WidgetOpts.LayoutData(widget.GridLayoutData{
-				HorizontalPosition: widget.GridLayoutPositionCenter,
+				HorizontalPosition: widget.GridLayoutPositionStart,
 				VerticalPosition: widget.GridLayoutPositionStart,
-				MaxWidth: controller.GetDifficulty().CellSize,
-				MaxHeight: controller.GetDifficulty().CellSize,
+				MaxWidth: cellSize,
+				MaxHeight: cellSize,
 			}),
 
 			widget.WidgetOpts.MouseButtonPressedHandler(func(args *widget.WidgetMouseButtonPressedEventArgs) {
@@ -98,14 +100,15 @@ func newBoardCellButton(r, c int) *widget.Button {
 func RenderBoard() *widget.Container {	
 	BoardContainer = newBoardContainer()
 
+	// Create new BoardCells
+	BoardCells = make([][]*widget.Button, screenHeight)
 	for r := 0; r < screenHeight; r++ {
-		BoardCells = append(BoardCells, make([]*widget.Button, screenWidth))
+		BoardCells[r] = make([]*widget.Button, screenWidth)
 		for c := 0; c < screenWidth; c++ {
 			BoardCells[r][c] = newBoardCellButton(r, c)
 			BoardContainer.AddChild(BoardCells[r][c])
 		}
 	}
-	
 
 	return BoardContainer
 }
